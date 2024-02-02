@@ -1,62 +1,62 @@
 import numpy as np
 
 class ClassificatoreKNN:
-    def __init__(self, k, peso=None):
+    def __init__(self, k, weight=None):
+        # Memorizza il valore di k e la misura della distanza come uniforme o distanza
         self.k = k
-        self.peso = peso  # Peso per la predizione
+        self.weight = weight
 
-    def addestra(self, x_addestramento, y_addestramento):
+    def fit(self, x_train, y_train):
         '''
             Addestramento modello KNN con i dati.
 
             parametri:
-            x_addestramento (lista): elenco dei dati di addestramento.
-            y_addestramento (lista): elenco delle etichette di addestramento.
-            k =
-            peso  # Peso per la predizione
+            x_train (lista): elenco dei dati di addestramento.
+            y_train (lista): elenco delle etichette di addestramento.
         '''
         
-        self.x_addestramento = x_addestramento
-        self.y_addestramento = y_addestramento
+        self.x_train = x_train
+        self.y_train = y_train
 
-    def predizione(self, X):
-        predizioni = []
-        for test in X:
-            temp = self.__predizione(test)
-            predizioni.append(temp)
-        return predizioni
+    def predict(self, x):
+        predictions = []
+        for test in x:
+            temp = self.__predict(test)
+            predictions.append(temp)
+        return predictions
 
-    def __predizione(self, x):
-        distanze = []
-        for addestramento in self.x_addestramento:
-            distanza = self.distanza_euclidea(x, addestramento)
-            distanze.append(distanza)
-        indici_distanze_minime = sorted(range(len(distanze)), key=lambda indice: distanze[indice])[:self.k]
-        distanze_minime = sorted(distanze)[:self.k]
-        print(indici_distanze_minime)
-        etichette_distanze_minime = []
-        for i in indici_distanze_minime:
-            etichette_distanze_minime.append(self.y_addestramento[i])
+    def __predict(self, x):
+        distances = []
+        for train in self.X_train:
+            distance = self.euclidean_distance(x, train)
+            distances.append(distance)
+        min_distance_indices = sorted(range(len(distances)), key=lambda index: distances[index])[: self.k]
+        min_distances = sorted(distances)[: self.k]
+        print(min_distance_indices)
+        min_distance_labels = []
+        for i in min_distance_indices:
+            min_distance_labels.append(self.y_train[i])
         
-        if self.peso == 'distanza':
-            piu_comuni = {}
-            for i in range(len(etichette_distanze_minime)):
-                etichetta_corrente = etichette_distanze_minime[i]
-                if distanze_minime[i] != 0:
-                    if etichetta_corrente not in piu_comuni.keys():
-                        piu_comuni[etichetta_corrente] = 1/distanze_minime[i]
+        # Se la misura della distanza non è uniforme, prende la media ponderata dei vicini più prossimi
+        if self.weight == 'distance':
+            most_common = {}
+            for i in range(len(min_distance_labels)):
+                current_label = min_distance_labels[i]
+                if min_distances[i] != 0:
+                    if current_label not in most_common.keys():
+                        most_common[current_label] = 1 / min_distances[i]
                     else:
-                        piu_comuni[etichetta_corrente] += 1/distanze_minime[i]
-            return max(piu_comuni, key=lambda x: piu_comuni[x])
-        else:
-            piu_comuni = {}
-            for i in etichette_distanze_minime:
-                if i not in piu_comuni.keys():
-                    piu_comuni[i] = 1
+                        most_common[current_label] += 1 / min_distances[i]
+            return max(most_common, key=lambda x: most_common[x])
+        else: # Se la misura della distanza è uniforme, prendi la moda dei vicini più prossimi
+            most_common = {}
+            for i in min_distance_labels:
+                if i not in most_common.keys():
+                    most_common[i] = 1
                 else:
-                    piu_comuni[i] += 1
-            return max(piu_comuni, key=lambda x: piu_comuni[x])
+                    most_common[i] += 1
+            return max(most_common, key=lambda x: most_common[x])
 
-    def distanza_euclidea(self, x, y):
-        distanza = np.sqrt(np.sum(x-y)**2)
-        return distanza
+    def euclidean_distance(self, x, y):
+        distance = np.sqrt(np.sum(x-y)**2)
+        return distance
