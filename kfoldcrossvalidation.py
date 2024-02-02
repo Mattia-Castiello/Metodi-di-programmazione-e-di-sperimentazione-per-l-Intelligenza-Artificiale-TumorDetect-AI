@@ -3,7 +3,7 @@ class KFoldCrossValidation:
     """
     Modella la tecnica di k-fold cross validation per la suddivisione di un dataset in training set e test set.
     """
-    def __init__(self, data, target, K=10, random_state=0):
+    def __init__(self, data, target, K):
         """
         Costruttore
 
@@ -14,9 +14,8 @@ class KFoldCrossValidation:
         target : pandas.Series
             la serie di valori target
         K : int
-            il numero di fold. Di default è 10.
-        random_state : int, optional
-            il seme per la generazione di numeri casuali. Di default è 0.
+            il numero di fold
+
 
         Returns
             ----
@@ -25,9 +24,7 @@ class KFoldCrossValidation:
         self.data = data
         self.target = target
         self.K = K
-        self.random_state = random_state
         self.fold = []
-        self.split()
     def split(self):
         """
         Suddivide il dataset in training set e test set.
