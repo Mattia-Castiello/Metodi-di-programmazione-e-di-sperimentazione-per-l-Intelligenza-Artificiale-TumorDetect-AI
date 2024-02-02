@@ -39,10 +39,8 @@ class KFoldCrossValidation:
             - i valori target del test set
 
         """
-        #assicura che la sequenza di numeri casuali generata sia sempre la stessa per lo stesso valore di random_state
-        np.random.seed(self.random_state)
-        #generazione degli indici
-        indices = np.random.permutation(self.data.index)
+
+        indices = np.random.permutation(self.data.index) #permuta gli indici del dataset
         #generazione dei fold
         fold_size = int(len(self.data)/self.K)
         for i in range(self.K):

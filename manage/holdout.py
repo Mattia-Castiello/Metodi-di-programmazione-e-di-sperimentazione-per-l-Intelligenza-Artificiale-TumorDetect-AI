@@ -55,4 +55,3 @@ class Holdout:
         self.train_target = self.target.loc[train_index]
         self.test_target = self.target.loc[test_index]
         return self.train, self.test, self.train_target, self.test_target
-

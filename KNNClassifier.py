@@ -27,7 +27,7 @@ class KNNClassifier:
 
     def __predict(self, x):
         distances = []
-        for train in self.X_train:
+        for train in self.x_train:
             distance = self.euclidean_distance(x, train)
             distances.append(distance)
         min_distance_indices = sorted(range(len(distances)), key=lambda index: distances[index])[: self.k]
