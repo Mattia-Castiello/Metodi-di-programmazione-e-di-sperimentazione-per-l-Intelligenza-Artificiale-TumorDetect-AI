@@ -25,6 +25,7 @@ class KFoldCrossValidation:
         self.target = target
         self.K = K
         self.fold = []
+
     def split(self):
         """
         Suddivide il dataset in training set e test set.
@@ -52,5 +53,11 @@ class KFoldCrossValidation:
             #generazione dei target
             train_target = self.target.loc[train_index]
             test_target = self.target.loc[test_index]
-            self.fold.append((train, test, train_target, test_target))
-        return self.fold
+
+            # Trasforma da tupla in una lista
+            train = train_data.values.tolist()
+            test = test_data.values.tolist()
+            train_target = train_target.values.tolist()
+            test_target = test_target.values.tolist()
+            self.fold.append([train, test, train_target, test_target])
+        return train, test, train_target, test_target
