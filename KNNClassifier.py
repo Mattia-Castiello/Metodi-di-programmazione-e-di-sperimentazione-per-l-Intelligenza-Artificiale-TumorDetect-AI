@@ -1,6 +1,6 @@
 import numpy as np
 
-class ClassificatoreKNN:
+class KNNClassifier:
     def __init__(self, k, weight=None):
         # Memorizza il valore di k e la misura della distanza come uniforme o distanza
         self.k = k
