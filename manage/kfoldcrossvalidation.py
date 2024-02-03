@@ -42,6 +42,7 @@ class KFoldCrossValidation:
 
         """
 
+
         indices = np.random.permutation(self.data.index) # permuta gli indici del dataset
         # generazione dei fold
         fold_size = int(len(self.data)/self.K)
@@ -56,9 +57,36 @@ class KFoldCrossValidation:
             test_target = self.target.loc[test_index]
 
             # Trasforma da tupla in una lista
-            train = train_data.values.tolist()
-            test = test_data.values.tolist()
+            train = train.values.tolist()
+            test = test.values.tolist()
             train_target = train_target.values.tolist()
             test_target = test_target.values.tolist()
             self.fold.append([train, test, train_target, test_target])
         return train, test, train_target, test_target
+    def evaluate(self, k):
+        """
+        Valuta le performance del modello KNN con k-fold cross validation.
+
+        Parameters
+        ----------
+        k : int
+            il valore di k per il modello KNN
+
+        Returns
+        -------
+        list
+            una lista di float, ognuno dei quali rappresenta l'accuratezza del modello KNN per un fold
+        """
+        accuracy = []
+        for i in range(self.K):
+            train, test, train_target, test_target = self.fold[i]
+            knn = KNNClassifier(k)
+            knn.fit(train, train_target) # addestra il modello
+            predictions = knn.predict(test) # predice i valori target
+            correct = 0 # contatore per il numero di predizioni corrette
+            for i in range(len(predictions)):
+                if predictions[i] == test_target[i]:
+                    correct += 1
+            accuracy.append(correct / len(predictions))
+        return accuracy
+
