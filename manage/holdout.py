@@ -1,4 +1,5 @@
 import numpy as np
+from KNNClassifier import KNNClassifier
 class Holdout:
     """
     Modella la tecnica di holdout per la suddivisione di un dataset in training set e test set.
@@ -61,4 +62,25 @@ class Holdout:
         self.train_target = self.train_target.values.tolist()
         self.test_target = self.test_target.values.tolist()
         return self.train, self.test, self.train_target, self.test_target
+
+    def evaluate(self):
+        """
+        Valuta il modello.
+
+        Returns
+        -------
+        float
+            l'accuratezza del modello
+
+        """
+        knn = KNNClassifier(3)
+        knn.fit(self.train, self.train_target) #addestra il modello
+        predictions = knn.predict(self.test) #predice i valori target
+        correct = 0 #contatore per i valori predetti correttamente
+        for i in range(len(predictions)):
+            if predictions[i] == self.test_target[i]:
+                correct += 1
+        holdout_accuracy = correct / len(predictions) #calcola l'accuratezza
+        return holdout_accuracy
+
 
