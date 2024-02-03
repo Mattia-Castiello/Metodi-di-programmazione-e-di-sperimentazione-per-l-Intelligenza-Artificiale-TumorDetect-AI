@@ -54,5 +54,11 @@ class Holdout:
         #generazione dei target
         self.train_target = self.target.loc[train_index]
         self.test_target = self.target.loc[test_index]
+
+        #conversione da dataframe a lista
+        self.train = self.train.values.tolist()
+        self.test = self.test.values.tolist()
+        self.train_target = self.train_target.values.tolist()
+        self.test_target = self.test_target.values.tolist()
         return self.train, self.test, self.train_target, self.test_target
 
