@@ -64,9 +64,9 @@ class Evaluation:
 
         """
         if chosen_method == 'holdout':
-            ho = Holdout(data, target,train_size)
+            holdout_model = Holdout(data, target, train_size)
         elif chosen_method == 'kfold':
-            kf = KFoldCrossValidation(data, target, K)
+            kfold_model = KFoldCrossValidation(data, target, K)
         else:
             print('Errore: metodo di valutazione non riconosciuto')
 
