@@ -3,7 +3,7 @@ import numpy as np
 
 #La classe bridger si occupa di colmare i valori nulli all'interno del dataset
 
-class Bridge:
+class Bridger:
     # il metodo impution va a colmare i valori nulli effettuando l'imputazione
     # prende in ingresso il dataset e restituisce il dataset modificato
     def impution(self, dataset):
