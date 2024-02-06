@@ -48,7 +48,10 @@ class Holdout:
         """
 
         train_index = np.random.choice(self.data.index, size=int(self.train_size*len(self.data)), replace=False)
-        test_index = self.data.index[~self.data.index.isin(train_index)] # ~ è l'operatore di negazione logica: prende gli indici che non sono in train_index. isin controlla se è presente quel valore nel DataFrame
+        test_index = self.data.index[~self.data.index.isin(train_index)] # ~ è l'operatore di negazione logica: prende
+        # gli indici che non sono in train_index.
+        # isin controlla se è presente quel valore nel DataFrame
+
         #generazione dei train set e test set
         self.train = self.data.loc[train_index] #loc seleziona le righe con gli indici indicati
         self.test = self.data.loc[test_index]
