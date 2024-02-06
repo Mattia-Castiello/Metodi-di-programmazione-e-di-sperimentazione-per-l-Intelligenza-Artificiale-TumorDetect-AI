@@ -1,9 +1,9 @@
 import pandas as pd
-from Reader_dataset import Reader
+from Reader_dataset import Reader_dataset
 #importiamo la classe astratta
 
 #la classe Reader_dataset_csv si occupa di leggere un dataset con estensione csv
-class Reader_dataset_csv(Reader):
+class Reader_dataset_csv(Reader_dataset):
     #il metodo parse prende in ingresso il nome del file e restituisce in uscita un dataset
     def parse(self, filename):
         df_csv=pd.read_csv(filename)
