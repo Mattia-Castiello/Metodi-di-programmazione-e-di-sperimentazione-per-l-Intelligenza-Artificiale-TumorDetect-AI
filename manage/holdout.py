@@ -22,6 +22,7 @@ class Holdout:
             ----
         None
         """
+        self.K = None
         self.data = data
         self.target = target
         self.train_size = train_size
@@ -83,7 +84,7 @@ class Holdout:
 
 
         """
-        knn = KNNClassifier(3)
+        knn = KNNClassifier(self.K)
         knn.fit(self.train, self.train_target) #addestra il modello
         predictions = knn.predict(self.test) #predice i valori target
 
@@ -93,14 +94,15 @@ class Holdout:
         false_negative = 0
 
         for i in range(len(predictions)):
-            if predictions[i] == self.test_target[i]:
+            if predictions[i] == 1 and self.test_target[i] == 1:
                 true_positive += 1
-            else:
+            elif predictions[i] == 1 and self.test_target[i] == 0:
                 false_positive += 1
-            if predictions[i] != self.test_target[i]:
+            elif predictions[i] == 0 and self.test_target[i] == 0:
                 true_negative += 1
-            else:
+            elif predictions[i] == 0 and self.test_target[i] == 1:
                 false_negative += 1
+
         return true_positive, false_positive, true_negative, false_negative
 
 
