@@ -13,6 +13,5 @@ class Standardizer:
                 mean = dataset[col].mean()
                 #standardizzazione delle colonne che non sono class e sample code number
                 dataset[col] = (dataset[col] - mean) / std
-                print(dataset)
 
         return dataset

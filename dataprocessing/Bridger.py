@@ -9,7 +9,6 @@ class Bridger:
     def impution(self, dataset):
         if dataset.isnull().sum().any():
             col_Nan = dataset.columns[dataset.isnull().sum() > 0].tolist()
-            print(col_Nan)
             # calcoliamo la mediana dei valori e la sostituiamo al posto dei valori nulli
             # scegliamo la mediana poichè inserisce valori interi
             #inoltre se il valore nullo appartiene alla colonna Class eliminiamo la riga
