@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-#La classe bridger si occupa di colmare i valori nulli all'interno del dataset
+#La classe bridger si occupa di colmare i valori Nan all'interno del dataset
 
 class Bridger:
     # il metodo impution va a colmare i valori nulli effettuando l'imputazione
@@ -20,5 +20,4 @@ class Bridger:
                 else:
                     revenue_median = dataset[col].median()
                     dataset[col].fillna(revenue_median, inplace=True)
-
         return dataset
