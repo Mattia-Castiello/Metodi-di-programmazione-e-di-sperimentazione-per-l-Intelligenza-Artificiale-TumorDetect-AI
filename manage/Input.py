@@ -1,11 +1,19 @@
+from dataprocessing.reader.Reader_dataset_factory import Reader_dataset_factory
+
 class Input:
-    def __init__(self):
-        self.k = 0
-        self.evaluation = None
-        self.training = None
+    def __init__(self, path_dataset=None, k=None, evaluation=None, training=None, test_percentage=None, K=None, metrics=[], data=None):
+        self.k = K
+        self.evaluation = evaluation
+        self.training = training
         self.test_percentage = None
-        self.K = None
-        self.metrics = []
+        self.K = K
+        self.metrics = metrics
+        self.path_dataset = path_dataset
+        self.data = data
+
+    def get_path(self):
+        self.path_dataset = input("Inserisci il percorso del dataset: ")
+        self.data = Reader_dataset_factory().readerFactoryManager(self.path_dataset)
 
     def get_k(self):
         while True:
@@ -90,6 +98,8 @@ class Input:
                 break
 
     def get_input(self):
+        self.get_path()
         self.get_k()
         self.get_evaluation_method()
         self.get_metrics()
+        return self
