@@ -1,5 +1,5 @@
-from Reader_dataset_csv import Reader_dataset_csv
-from Reader_dataset_json import Reader_dataset_json
+from .Reader_dataset_csv import Reader_dataset_csv
+from .Reader_dataset_json import Reader_dataset_json
 
 #la classe Reader_dataset_factory instanzia la giusta classe in base all'estensione del file di input
 class Reader_dataset_factory:

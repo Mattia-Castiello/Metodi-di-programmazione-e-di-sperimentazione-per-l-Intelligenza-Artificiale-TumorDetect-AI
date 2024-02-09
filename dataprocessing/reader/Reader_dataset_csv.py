@@ -1,5 +1,5 @@
 import pandas as pd
-from Reader_dataset import Reader_dataset
+from .Reader_dataset import Reader_dataset
 #importiamo la classe astratta
 
 #la classe Reader_dataset_csv si occupa di leggere un dataset con estensione csv
@@ -14,6 +14,4 @@ class Reader_dataset_csv(Reader_dataset):
         df_csv['Sample code number'] = range(1, len(df_csv) + 1)
 
         df_csv = df_csv.set_index('Sample code number')
-        print(df_csv)
-
         return df_csv

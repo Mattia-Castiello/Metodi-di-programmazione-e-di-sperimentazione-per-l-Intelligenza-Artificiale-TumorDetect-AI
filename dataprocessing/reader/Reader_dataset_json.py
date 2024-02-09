@@ -1,5 +1,5 @@
 import pandas as pd
-from Reader_dataset import Reader_dataset
+from .Reader_dataset import Reader_dataset
 #importiamo la classe astratta
 
 #la classe Reader_dataset_csv si occupa di leggere un dataset con estensione json
@@ -14,7 +14,6 @@ class Reader_dataset_json(Reader_dataset):
         df_json['Sample code number'] = range(1, len(df_json) + 1)
 
         df_json = df_json.set_index('Sample code number')
-        print(df_json)
 
         return df_json
 
