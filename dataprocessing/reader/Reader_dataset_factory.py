@@ -11,11 +11,11 @@ class Reader_dataset_factory:
     def readerFactoryManager(self, filename):
         try:
             if filename.endswith('csv'):
-                return Reader_dataset_csv()
+                return Reader_dataset_csv().parse(filename)
             elif filename.endswith('json'):
-                return Reader_dataset_json()
+                return Reader_dataset_json().parse(filename)
         except RuntimeError:
                 print("Unrecognized file format for the dataset")
                 print("\nChange the file extension to CSV")
                 filename.to_csv('new_df.csv')
-                return Reader_dataset_csv()
+                return Reader_dataset_csv().parse(filename)
