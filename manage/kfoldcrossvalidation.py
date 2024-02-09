@@ -145,13 +145,16 @@ class KFoldCrossValidation:
 
         Returns
         -------
-        list
+        float
             l'accuratezza
+        list
+            l'accuratezza scores
         """
-        accuracy = []
+        accuracy_scores = []
         for i in range(self.K):
-            accuracy.append((confusion_matrix[0] + confusion_matrix[3])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
-        return accuracy
+            accuracy_scores.append((confusion_matrix[0] + confusion_matrix[3])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
+            accuracy = np.mean(accuracy_scores)
+        return accuracy, accuracy_scores
 
     def error_rate(self, confusion_matrix):
         """
@@ -164,13 +167,16 @@ class KFoldCrossValidation:
 
         Returns
         -------
-        list
+        float
             l'error rate
+        list
+            l'error rate scores
         """
-        error_rate = []
+        error_rate_scores = []
         for i in range(self.K):
-            error_rate.append((confusion_matrix[1] + confusion_matrix[2]) / (confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
-        return error_rate
+            error_rate_scores.append((confusion_matrix[1] + confusion_matrix[2]) / (confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
+            error_rate = np.mean(error_rate_scores)
+        return error_rate, error_rate_scores
 
     def sensitivity(self, confusion_matrix):
         """
@@ -183,13 +189,16 @@ class KFoldCrossValidation:
 
         Returns
         -------
-        list
+        float
             la sensitivity
+        list
+            la sensitivity scores
         """
-        sensitivity = []
+        sensitivity_scores = []
         for i in range(self.K):
-            sensitivity.append(confusion_matrix[3] / (confusion_matrix[3] + confusion_matrix[2]))
-        return sensitivity
+            sensitivity_scores.append(confusion_matrix[3] / (confusion_matrix[3] + confusion_matrix[2]))
+            sensitivity = np.mean(sensitivity_scores)
+        return sensitivity, sensitivity_scores
 
     def specificity(self, confusion_matrix):
         """
@@ -202,13 +211,16 @@ class KFoldCrossValidation:
 
         Returns
         -------
-        list
+        float
             la specificity
+        list
+            la specificity scores
         """
-        specificity = []
+        specificity_scores = []
         for i in range(self.K):
-            specificity.append(confusion_matrix[0] / (confusion_matrix[0] + confusion_matrix[1]))
-        return specificity
+            specificity_scores.append(confusion_matrix[0] / (confusion_matrix[0] + confusion_matrix[1]))
+            specificity = np.mean(specificity_scores)
+        return specificity, specificity_scores
 
     def geometric_mean(self, confusion_matrix):
         """
@@ -221,10 +233,13 @@ class KFoldCrossValidation:
 
         Returns
         -------
+        float
+            la geometric mean
         list
             la geometric mean
         """
-        geometric_mean = []
+        geometric_mean_scores = []
         for i in range(self.K):
-            geometric_mean.append(np.sqrt(self.sensitivity(confusion_matrix) * self.specificity(confusion_matrix)))
-        return geometric_mean
+            geometric_mean_scores.append(np.sqrt(self.sensitivity(confusion_matrix) * self.specificity(confusion_matrix)))
+            geometric_mean = np.mean(geometric_mean)
+        return geometric_mean, geometric_mean_scores
