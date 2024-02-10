@@ -13,9 +13,10 @@ class Standardizer:
                 mean = dataset[col].mean()
                 #standardizzazione delle colonne che non sono class
                 dataset[col] = (dataset[col] - mean) / std
+                data, target = self.split(dataset)
 
 
-        return dataset
+        return data, target
 
 
     #il metodo split divide il dataset in due datset contenenti rispettivamente le features in data e le labels in target
