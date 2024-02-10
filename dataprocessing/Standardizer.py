@@ -6,12 +6,13 @@ class Standardizer:
     #riceve in ingresso un dataset e restituisce il dataset diviso
     def standardization(self,dataset):
         for col in dataset.columns:
-            if np.issubdtype(dataset[col].dtype,np.number) and col != 'Class' and col!= 'Sample code number':
+            if np.issubdtype(dataset[col].dtype,np.number) and col != 'Class':
                 #calcolo della deviazione standard per ogni colonna
                 std = dataset[col].std()
                 #calcolo della media per ogni colonna
                 mean = dataset[col].mean()
-                #standardizzazione delle colonne che non sono class e sample code number
+                #standardizzazione delle colonne che non sono class
                 dataset[col] = (dataset[col] - mean) / std
+
 
         return dataset
