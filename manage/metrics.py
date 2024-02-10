@@ -64,7 +64,7 @@ class Metrics:
         accuracy_scores = []
         for i in range(K):
             accuracy_scores.append((confusion_matrix[0] + confusion_matrix[3])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
-            accuracy = np.mean(accuracy_scores)
+        accuracy = np.mean(accuracy_scores)
         return accuracy, accuracy_scores
 
     def error_rate(self, confusion_matrix, K=1):
@@ -90,7 +90,7 @@ class Metrics:
         error_rate_scores = []
         for i in range(K):
             error_rate_scores.append((confusion_matrix[1] + confusion_matrix[2])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
-            error_rate = np.mean(error_rate_scores)
+        error_rate = np.mean(error_rate_scores)
         return error_rate, error_rate_scores
 
     def sensitivity(self, confusion_matrix, K=1):
@@ -116,7 +116,7 @@ class Metrics:
         sensitivity_scores = []
         for i in range(K):
             sensitivity_scores.append(confusion_matrix[0]/(confusion_matrix[0] + confusion_matrix[2]))
-            sensitivity = np.mean(sensitivity_scores)
+        sensitivity = np.mean(sensitivity_scores)
         return sensitivity, sensitivity_scores
 
     def specificity(self, confusion_matrix, K=1):
@@ -142,7 +142,7 @@ class Metrics:
         specificity_scores = []
         for i in range(K):
             specificity_scores.append(confusion_matrix[3]/(confusion_matrix[3] + confusion_matrix[1]))
-            specificity = np.mean(specificity_scores)
+        specificity = np.mean(specificity_scores)
         return specificity, specificity_scores
 
     def geometric_mean(self, confusion_matrix, K=1):
@@ -170,7 +170,7 @@ class Metrics:
             sensitivity = confusion_matrix[0]/(confusion_matrix[0] + confusion_matrix[2])
             specificity = confusion_matrix[3]/(confusion_matrix[3] + confusion_matrix[1])
             geometric_mean_scores.append(np.sqrt(sensitivity * specificity))
-            geometric_mean = np.mean(geometric_mean_scores)
+        geometric_mean = np.mean(geometric_mean_scores)
         return geometric_mean, geometric_mean_scores
 
 
@@ -191,17 +191,17 @@ class Metrics:
             le metriche
         """
         metrics = []
-        if 1 in Input.choose_metrics:
+        if 1 in self.metrics:
             metrics.append(self.accuracy(confusion_matrix, K))
-        if 2 in Input.choose_metrics:
+        if 2 in self.metrics:
             metrics.append(self.error_rate(confusion_matrix, K))
-        if 3 in Input.choose_metrics:
+        if 3 in self.metrics:
             metrics.append(self.sensitivity(confusion_matrix, K))
-        if 4 in Input.choose_metrics:
+        if 4 in self.metrics:
             metrics.append(self.specificity(confusion_matrix, K))
-        if 5 in Input.choose_metrics:
+        if 5 in self.metrics:
             metrics.append(self.geometric_mean(confusion_matrix, K))
-        if 6 in Input.choose_metrics:
+        if 6 in self.metrics:
             metrics = [self.accuracy(confusion_matrix, K), self.error_rate(confusion_matrix, K), self.sensitivity(confusion_matrix, K), self.specificity(confusion_matrix, K), self.geometric_mean(confusion_matrix, K)]
         return metrics
 
