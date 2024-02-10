@@ -7,7 +7,7 @@ class KFoldCrossValidation:
     Modella la tecnica di k-fold cross validation per la suddivisione di un dataset in training set e test set.
     """
 
-    def __init__(self, data, target, K):
+    def __init__(self, data, target, metrics, k, K):
         """
         Costruttore
 
@@ -27,6 +27,8 @@ class KFoldCrossValidation:
         """
         self.data = data
         self.target = target
+        self.metrics = metrics
+        self.k = k
         self.K = K
         self.fold = []
 
