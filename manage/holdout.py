@@ -4,7 +4,7 @@ class Holdout:
     """
     Modella la tecnica di holdout per la suddivisione di un dataset in training set e test set.
     """
-    def __init__(self, data, target, train_size=0.8):
+    def __init__(self, data, target, metrics, k, train_size=0.8):
         """
         Costruttore
 
@@ -22,10 +22,11 @@ class Holdout:
             ----
         None
         """
-        self.K = None
+        self.k = k
         self.data = data
         self.target = target
         self.train_size = train_size
+        self.metrics = metrics
         self.train = None
         self.test = None
         self.train_target = None
@@ -84,7 +85,7 @@ class Holdout:
 
 
         """
-        knn = KNNClassifier(self.K)
+        knn = KNNClassifier(self.k)
         knn.fit(self.train, self.train_target) #addestra il modello
         predictions = knn.predict(self.test) #predice i valori target
 
