@@ -4,7 +4,7 @@ class Holdout:
     """
     Modella la tecnica di holdout per la suddivisione di un dataset in training set e test set.
     """
-    def __init__(self, data, target, train_size=0.8):
+    def __init__(self, data, target, metrics, k, train_size=0.8):
         """
         Costruttore
 
@@ -22,10 +22,11 @@ class Holdout:
             ----
         None
         """
-        self.K = None
+        self.k = k
         self.data = data
         self.target = target
         self.train_size = train_size
+        self.metrics = metrics
         self.train = None
         self.test = None
         self.train_target = None
@@ -84,7 +85,7 @@ class Holdout:
 
 
         """
-        knn = KNNClassifier(self.K)
+        knn = KNNClassifier(self.k)
         knn.fit(self.train, self.train_target) #addestra il modello
         predictions = knn.predict(self.test) #predice i valori target
 
@@ -106,112 +107,4 @@ class Holdout:
         return true_positive, false_positive, true_negative, false_negative
 
 
-    def confusion_matrix(self, true_positive, false_positive, true_negative, false_negative):
-        """
-        Calcola la confusion matrix.
 
-        Parameters
-        ----------
-        true_positive : int
-            il numero di veri positivi
-        false_positive : int
-            il numero di falsi positivi
-        true_negative : int
-            il numero di veri negativi
-        false_negative : int
-            il numero di falsi negativi
-
-        Returns
-        -------
-        list
-            la confusion matrix
-
-        """
-        confusion_matrix = [true_negative, false_positive, false_negative, true_positive]
-        return confusion_matrix
-
-    def accuracy(self, confusion_matrix):
-        """
-        Calcola l'accuratezza.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            l'accuratezza
-        """
-
-        accuracy = (confusion_matrix[0] + confusion_matrix[3]) / (confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3])
-        return accuracy
-
-    def error_rate(self, confusion_matrix):
-        """
-        Calcola l'error rate.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            l'error rate
-        """
-        error_rate = (confusion_matrix[1] + confusion_matrix[2]) / (confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3])
-        return error_rate
-
-    def sensitivity(self, confusion_matrix):
-        """
-        Calcola la sensitivity.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            la sensitivity
-        """
-        sensitivity = confusion_matrix[3] / (confusion_matrix[3] + confusion_matrix[2])
-        return sensitivity
-
-    def specificity(self, confusion_matrix):
-        """
-        Calcola la specificity.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            la specificity
-        """
-        specificity = confusion_matrix[0] / (confusion_matrix[0] + confusion_matrix[1])
-        return specificity
-
-    def geometric_mean(self, confusion_matrix):
-        """
-        Calcola la geometric mean.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            la geometric mean
-        """
-        geometric_mean = np.sqrt(self.sensitivity(confusion_matrix) * self.specificity(confusion_matrix))
-        return geometric_mean

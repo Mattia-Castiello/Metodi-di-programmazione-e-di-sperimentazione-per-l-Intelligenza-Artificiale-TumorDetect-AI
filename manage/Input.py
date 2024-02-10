@@ -65,7 +65,7 @@ class Input:
             except ValueError:
                 print("Errore: Inserisci un numero intero valido.")
 
-    def get_metrics(self):
+    def choose_metrics(self):
         print("Scegli quali metriche devono essere validate:")
         print("1. Accuracy Rate")
         print("2. Error Rate")
@@ -101,5 +101,5 @@ class Input:
         self.get_path()
         self.get_k()
         self.get_evaluation_method()
-        self.get_metrics()
+        self.choose_metrics()
         return self

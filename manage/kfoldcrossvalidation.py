@@ -7,7 +7,7 @@ class KFoldCrossValidation:
     Modella la tecnica di k-fold cross validation per la suddivisione di un dataset in training set e test set.
     """
 
-    def __init__(self, data, target, K):
+    def __init__(self, data, target, metrics, k, K):
         """
         Costruttore
 
@@ -27,6 +27,8 @@ class KFoldCrossValidation:
         """
         self.data = data
         self.target = target
+        self.metrics = metrics
+        self.k = k
         self.K = K
         self.fold = []
 
@@ -110,136 +112,3 @@ class KFoldCrossValidation:
                     false_negative.append(1)
         return true_positive, true_negative, false_positive, false_negative
 
-    def confusion_matrix(self, true_positive, true_negative, false_positive, false_negative):
-        """
-        Calcola la matrice di confusione.
-
-        Parameters
-        ----------
-        true_positive : list
-            una lista di int di veri positivi
-        true_negative : list
-            una lista di int di veri negativi
-        false_positive : list
-            una lista di int di falsi positivi
-        false_negative : list
-            una list di int di falsi negativi
-
-        Returns
-        -------
-        list
-            una lista di liste, ognuna dei quali rappresenta i valori della confusion matrix
-        """
-        confusion_matrix = [true_positive, false_positive, false_negative, true_negative]
-
-        return confusion_matrix
-
-    def accuracy(self, confusion_matrix):
-        """
-        Calcola l'accuratezza.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            l'accuratezza
-        list
-            l'accuratezza scores
-        """
-        accuracy_scores = []
-        for i in range(self.K):
-            accuracy_scores.append((confusion_matrix[0] + confusion_matrix[3])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
-            accuracy = np.mean(accuracy_scores)
-        return accuracy, accuracy_scores
-
-    def error_rate(self, confusion_matrix):
-        """
-        Calcola l'error rate.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            l'error rate
-        list
-            l'error rate scores
-        """
-        error_rate_scores = []
-        for i in range(self.K):
-            error_rate_scores.append((confusion_matrix[1] + confusion_matrix[2]) / (confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
-            error_rate = np.mean(error_rate_scores)
-        return error_rate, error_rate_scores
-
-    def sensitivity(self, confusion_matrix):
-        """
-        Calcola la sensitivity.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            la sensitivity
-        list
-            la sensitivity scores
-        """
-        sensitivity_scores = []
-        for i in range(self.K):
-            sensitivity_scores.append(confusion_matrix[3] / (confusion_matrix[3] + confusion_matrix[2]))
-            sensitivity = np.mean(sensitivity_scores)
-        return sensitivity, sensitivity_scores
-
-    def specificity(self, confusion_matrix):
-        """
-        Calcola la specificity.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            la specificity
-        list
-            la specificity scores
-        """
-        specificity_scores = []
-        for i in range(self.K):
-            specificity_scores.append(confusion_matrix[0] / (confusion_matrix[0] + confusion_matrix[1]))
-            specificity = np.mean(specificity_scores)
-        return specificity, specificity_scores
-
-    def geometric_mean(self, confusion_matrix):
-        """
-        Calcola la geometric mean.
-
-        Parameters
-        ----------
-        confusion_matrix : list
-            la confusion matrix
-
-        Returns
-        -------
-        float
-            la geometric mean
-        list
-            la geometric mean
-        """
-        geometric_mean_scores = []
-        for i in range(self.K):
-            geometric_mean_scores.append(np.sqrt(self.sensitivity(confusion_matrix) * self.specificity(confusion_matrix)))
-            geometric_mean = np.mean(geometric_mean)
-        return geometric_mean, geometric_mean_scores
