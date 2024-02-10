@@ -1,5 +1,6 @@
 import numpy as np
 from Input import Input
+import matplotlib.pyplot as plt
 
 class Metrics:
     """
@@ -225,6 +226,43 @@ class Metrics:
                 file.write(str(metric) + '\n')
         print("Le metriche sono state salvate su file.")
         return None
+
+    def metrics_plot(self, accuracy_scores, error_rate_scores, sensitivity_scores, specificity_scores, geometric_mean_scores):
+        """
+        Mostra i grafici delle metriche
+
+        Parameters
+        ----------
+        accuracy_scores : list
+            i valori di accuratezza per ogni esperimento
+
+        error_rate_scores : list
+            i valori di error rate per ogni esperimento
+
+        sensitivity_scores : list
+            i valori di sensitivity per ogni esperimento
+
+        specificity_scores : list
+            i valori di specificity per ogni esperimento
+
+        geometric_mean_scores : list
+            i valori di geometric mean per ogni esperimento
+        Returns
+        -------
+        None
+        """
+        label = ['Accuracy', 'Error Rate', 'Sensitivity', 'Specificity', 'Geometric Mean']
+        values = [accuracy_scores, error_rate_scores, sensitivity_scores, specificity_scores, geometric_mean_scores]
+
+        plt.figure(figsize=(10, 10))
+        plt.boxplot(values, labels=label)
+
+        plt.legend(loc='upper left') #posiziona la legenda in alto a sinistra
+        plt.xlabel('Esperimenti') #asse x
+        plt.ylabel('Metriche') #asse y
+        plt.title('Metriche di validazione') #titolo del grafico
+        plt.show()
+
 
 
 
