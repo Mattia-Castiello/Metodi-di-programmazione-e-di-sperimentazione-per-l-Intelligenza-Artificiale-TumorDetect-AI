@@ -18,7 +18,7 @@ class Standardizer:
         return dataset
 
 
-    #il metodo split divide il dataset in due datset contenenti rispettivamente le figures in data e le labels in target
+    #il metodo split divide il dataset in due datset contenenti rispettivamente le features in data e le labels in target
     def split(self, dataset):
 
         data = dataset.iloc[:, :-1]
