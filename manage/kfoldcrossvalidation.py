@@ -243,3 +243,4 @@ class KFoldCrossValidation:
             geometric_mean_scores.append(np.sqrt(self.sensitivity(confusion_matrix) * self.specificity(confusion_matrix)))
             geometric_mean = np.mean(geometric_mean)
         return geometric_mean, geometric_mean_scores
+
