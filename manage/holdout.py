@@ -4,7 +4,7 @@ class Holdout:
     """
     Modella la tecnica di holdout per la suddivisione di un dataset in training set e test set.
     """
-    def __init__(self, data, target, metrics, k, train_size=0.8):
+    def __init__(self, data, target, metrics, k, weight, train_size=0.8):
         """
         Costruttore
 
@@ -22,15 +22,14 @@ class Holdout:
             ----
         None
         """
-        self.k = k
         self.data = data
         self.target = target
+        self.metrics = metrics
+        self.k = k
+        self.weight = weight
         self.train_size = train_size
         self.metrics = metrics
-        self.train = None
-        self.test = None
-        self.train_target = None
-        self.test_target = None
+
 
     def split(self):
         """
@@ -55,18 +54,16 @@ class Holdout:
         # isin controlla se è presente quel valore nel DataFrame
 
         #generazione dei train set e test set
-        self.train = self.data.loc[train_index] #loc seleziona le righe con gli indici indicati
-        self.test = self.data.loc[test_index]
+        train = self.data.loc[train_index] #loc seleziona le righe con gli indici indicati
+        test = self.data.loc[test_index]
         #generazione dei target
-        self.train_target = self.target.loc[train_index]
-        self.test_target = self.target.loc[test_index]
+        train_target = self.target.loc[train_index]
+        test_target = self.target.loc[test_index]
 
-        #conversione da dataframe a lista
-        self.train = self.train.values.tolist()
-        self.test = self.test.values.tolist()
-        self.train_target = self.train_target.values.tolist()
-        self.test_target = self.test_target.values.tolist()
-        return self.train, self.test, self.train_target, self.test_target
+        print("\nlunghezze train e test: ", len(train), len(test), len(train_target), len(test_target))
+        return train, test, train_target, test_target
+
+
 
     def evaluate(self):
         """
@@ -85,23 +82,33 @@ class Holdout:
 
 
         """
-        knn = KNNClassifier(self.k)
-        knn.fit(self.train, self.train_target) #addestra il modello
-        predictions = knn.predict(self.test) #predice i valori target
+        train, test, train_target, test_target = self.split()
+        train = train.to_numpy()
+        train_target = train_target.to_numpy()
+        test = test.to_numpy()
+        test_target = test_target.to_numpy()
+        print("split type: ", type(train), type(test), type(train_target), type(test_target))
+
+        knn = KNNClassifier(self.k, self.weight)
+        knn.fit(train, train_target) #addestra il modello
+        predictions = knn.predict(test) #predice i valori target
 
         true_positive = 0
         true_negative = 0
         false_positive = 0
         false_negative = 0
 
+        print("predictions len: ", len(predictions), "\ntest_target len: ", len(test_target))
+        print("predictions: ", predictions)
+
         for i in range(len(predictions)):
-            if predictions[i] == 1 and self.test_target[i] == 1:
+            if predictions[i] == 4 and test_target[i] == 4:
                 true_positive += 1
-            elif predictions[i] == 1 and self.test_target[i] == 0:
+            elif predictions[i] == 4 and test_target[i] == 2:
                 false_positive += 1
-            elif predictions[i] == 0 and self.test_target[i] == 0:
+            elif predictions[i] == 2 and test_target[i] == 2:
                 true_negative += 1
-            elif predictions[i] == 0 and self.test_target[i] == 1:
+            elif predictions[i] == 2 and test_target[i] == 4:
                 false_negative += 1
 
         return true_positive, false_positive, true_negative, false_negative
