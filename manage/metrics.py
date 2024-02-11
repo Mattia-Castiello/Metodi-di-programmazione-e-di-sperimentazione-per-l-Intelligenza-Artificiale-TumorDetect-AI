@@ -46,6 +46,8 @@ class Metrics:
         print("False Positive: ", self.false_positive)
         print("False Negative: ", self.false_negative)
         confusion_matrix = [self.true_negative, self.false_positive, self.false_negative, self.true_positive]
+        print("confusion matrix: ", confusion_matrix)
+
         return confusion_matrix
 
     def accuracy(self, confusion_matrix, K=1):
@@ -69,8 +71,18 @@ class Metrics:
 
         """
         accuracy_scores = []
-        for i in range(K):
-            accuracy_scores.append((confusion_matrix[0] + confusion_matrix[3])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
+        true_positive = confusion_matrix[0]
+        false_positive = confusion_matrix[1]
+        false_negative = confusion_matrix[2]
+        true_negative = confusion_matrix[3]
+        # Se la confusion matrix è una lista di liste
+        if isinstance(confusion_matrix[0], list):
+            for i in range(K):
+                accuracy_scores.append((true_positive[i] + true_negative[i]) / (true_positive[i] + false_positive[i] + false_negative[i] + true_negative[i]))
+        # Se la confusion matrix è una lista singola
+        else:
+            accuracy_scores.append((true_positive + true_negative) / (true_positive + false_positive + false_negative + true_negative))
+
         accuracy = np.mean(accuracy_scores)
         return accuracy, accuracy_scores
 
@@ -95,8 +107,17 @@ class Metrics:
 
         """
         error_rate_scores = []
-        for i in range(K):
-            error_rate_scores.append((confusion_matrix[1] + confusion_matrix[2])/(confusion_matrix[0] + confusion_matrix[1] + confusion_matrix[2] + confusion_matrix[3]))
+        true_positive = confusion_matrix[0]
+        false_positive = confusion_matrix[1]
+        false_negative = confusion_matrix[2]
+        true_negative = confusion_matrix[3]
+        # Se la confusion matrix è una lista di liste
+        if isinstance(confusion_matrix[0], list):
+            for i in range(K):
+                error_rate_scores.append((false_positive[i] + false_negative[i]) / (true_positive[i] + false_positive[i] + false_negative[i] + true_negative[i]))
+        # Se la confusion matrix è una lista singola
+        else:
+            error_rate_scores.append((false_positive + false_negative) / (true_positive + false_positive + false_negative + true_negative))
         error_rate = np.mean(error_rate_scores)
         return error_rate, error_rate_scores
 
@@ -121,8 +142,19 @@ class Metrics:
 
         """
         sensitivity_scores = []
-        for i in range(K):
-            sensitivity_scores.append(confusion_matrix[0]/(confusion_matrix[0] + confusion_matrix[2]))
+        true_positive = confusion_matrix[0]
+        false_positive = confusion_matrix[1]
+        false_negative = confusion_matrix[2]
+        true_negative = confusion_matrix[3]
+
+        # Se la confusion matrix è una lista di liste
+        if isinstance(confusion_matrix[0], list):
+            for i in range(K):
+                sensitivity_scores.append(true_positive[i] / (true_positive[i] + false_negative[i]))
+        # Se la confusion matrix è una lista singola
+        else:
+            sensitivity_scores.append(true_positive / (true_positive + false_negative))
+
         sensitivity = np.mean(sensitivity_scores)
         return sensitivity, sensitivity_scores
 
@@ -147,8 +179,18 @@ class Metrics:
 
         """
         specificity_scores = []
-        for i in range(K):
-            specificity_scores.append(confusion_matrix[3]/(confusion_matrix[3] + confusion_matrix[1]))
+        true_positive = confusion_matrix[0]
+        false_positive = confusion_matrix[1]
+        false_negative = confusion_matrix[2]
+        true_negative = confusion_matrix[3]
+
+        # Se la confusion matrix è una lista di liste
+        if isinstance(confusion_matrix[0], list):
+            for i in range(K):
+                specificity_scores.append(true_negative[i] / (true_negative[i] + false_positive[i]))
+        # Se la confusion matrix è una lista singola
+        else:
+            specificity_scores.append(true_negative / (true_negative + false_positive))
         specificity = np.mean(specificity_scores)
         return specificity, specificity_scores
 
@@ -173,9 +215,21 @@ class Metrics:
 
         """
         geometric_mean_scores = []
-        for i in range(K):
-            sensitivity = confusion_matrix[0]/(confusion_matrix[0] + confusion_matrix[2])
-            specificity = confusion_matrix[3]/(confusion_matrix[3] + confusion_matrix[1])
+        true_positive = confusion_matrix[0]
+        false_positive = confusion_matrix[1]
+        false_negative = confusion_matrix[2]
+        true_negative = confusion_matrix[3]
+
+        # Se la confusion matrix è una lista di liste
+        if isinstance(confusion_matrix[0], list):
+            for i in range(K):
+                sensitivity = true_positive[i] / (true_positive[i] + false_negative[i])
+                specificity = true_negative[i] / (true_negative[i] + false_positive[i])
+                geometric_mean_scores.append(np.sqrt(sensitivity * specificity))
+        # Se la confusion matrix è una lista singola
+        else:
+            sensitivity = true_positive / (true_positive + false_negative)
+            specificity = true_negative / (true_negative + false_positive)
             geometric_mean_scores.append(np.sqrt(sensitivity * specificity))
         geometric_mean = np.mean(geometric_mean_scores)
         return geometric_mean, geometric_mean_scores
@@ -234,11 +288,18 @@ class Metrics:
         """
         with open(filename, 'w') as file:
             for metric, value in metrics.items():
-                file.write(f'{metric}: {value}\n')
+                # Verifica se il valore è una lista
+                if isinstance(value, list):
+                    # Se è una lista, formatta la lista come stringa
+                    value_str = ', '.join([str(v) for v in value])
+                    print(f'{metric}: {value_str}')
+                    file.write(f'{metric}: {value_str}\n')
+                else:
+                    file.write(f'{metric}: {value[1]}\n')
         print("Le metriche sono state salvate su file.")
         return None
 
-    def metrics_plot(self, accuracy_scores, error_rate_scores, sensitivity_scores, specificity_scores, geometric_mean_scores):
+    def metrics_plot(self, metrics):
         """
         Mostra i grafici delle metriche
 
@@ -262,16 +323,39 @@ class Metrics:
         -------
         None
         """
-        label = ['Accuracy', 'Error Rate', 'Sensitivity', 'Specificity', 'Geometric Mean']
-        values = [accuracy_scores, error_rate_scores, sensitivity_scores, specificity_scores, geometric_mean_scores]
+        # Estraiamo le etichette delle metriche
+        labels = list(metrics.keys())
+        # Estraiamo le liste dei valori delle metriche
+        metric_scores = [value[1] for value in metrics.values()]
 
-        plt.figure(figsize=(10, 10))
-        plt.boxplot(values, labels=label)
+        # Plot del boxplot
+        plt.figure(figsize=(12, 6))
+        plt.boxplot(metric_scores, labels=labels)
 
-        plt.legend(loc='upper left') #posiziona la legenda in alto a sinistra
-        plt.xlabel('Esperimenti') #asse x
-        plt.ylabel('Metriche') #asse y
-        plt.title('Metriche di validazione') #titolo del grafico
+        plt.xlabel('Metriche')  # Asse x
+        plt.ylabel('Valori')  # Asse y
+        plt.title('Metriche di validazione')  # Titolo del grafico
+        plt.grid(True)  # Mostra la griglia
+
+        # Estrazione dei dati per il plot a linea
+        K_experiments = list(range(1, len(metric_scores[0]) + 1))
+
+        # Plot per ciascuna metrica
+        plt.figure(figsize=(12, 6))
+        # Plot per ciascuna metrica
+        for label, values in zip(labels, metric_scores):
+            plt.plot(K_experiments, values, marker='o', label=label)
+
+        # Etichette e titoli
+        plt.xlabel('Esperimento K')
+        plt.ylabel('Valore della metrica')
+        plt.title('Andamento delle metriche negli esperimenti K')
+
+        # Mostra la legenda
+        plt.legend()
+
+        # Mostra il grafico
+        plt.grid(True)
         plt.show()
 
 
