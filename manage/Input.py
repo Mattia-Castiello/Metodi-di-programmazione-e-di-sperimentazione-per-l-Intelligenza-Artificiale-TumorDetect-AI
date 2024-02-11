@@ -12,8 +12,18 @@ class Input:
         self.data = data
 
     def get_path(self):
-        self.path_dataset = input("Inserisci il percorso del dataset: ")
-        self.data = Reader_dataset_factory().readerFactoryManager(self.path_dataset)
+        while True:
+            self.path_dataset = input("Inserisci il percorso del dataset: ")
+            if self.path_dataset.startswith('"') and self.path_dataset.endswith('"'):
+                self.path_dataset = self.path_dataset[1:-1]  # Rimuove i doppi apici
+            try:
+                self.data = Reader_dataset_factory().readerFactoryManager(self.path_dataset)
+                if self.data is not None:
+                    break
+                else:
+                    print(f"Il file '{self.path_dataset}' non è stato trovato.")
+            except FileNotFoundError:
+                print(f"Il file '{self.path_dataset}' non è stato trovato.")
 
     def get_k(self):
         while True:
@@ -32,7 +42,6 @@ class Input:
                 choice = int(input("Inserisci il numero corrispondente alla tua scelta: "))
                 if choice == 1:
                     self.evaluation = 1
-                    self.get_training_percentage()
                     break
                 elif choice == 2:
                     self.evaluation = 2
@@ -118,6 +127,7 @@ class Input:
     def get_input(self):
         self.get_path()
         self.get_k()
+        self.get_training_percentage()
         self.get_evaluation_method()
         self.get_weight_method()
         self.choose_metrics()
