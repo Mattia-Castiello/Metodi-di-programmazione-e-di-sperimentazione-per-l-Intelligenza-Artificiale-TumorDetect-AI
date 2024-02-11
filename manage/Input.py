@@ -1,12 +1,12 @@
 from dataprocessing.reader.Reader_dataset_factory import Reader_dataset_factory
 
 class Input:
-    def __init__(self, path_dataset=None, k=None, evaluation=None, training=None, test_percentage=None, K=None, metrics=[], data=None):
-        self.k = K
+    def __init__(self, path_dataset=None, k=None, evaluation=None, training=None, K=None, weight = 'uniform', metrics=[], data=None):
+        self.k = k
         self.evaluation = evaluation
         self.training = training
-        self.test_percentage = None
         self.K = K
+        self.weight = weight
         self.metrics = metrics
         self.path_dataset = path_dataset
         self.data = data
@@ -51,6 +51,24 @@ class Input:
                     break
                 else:
                     print("Errore: Inserisci un numero intero valido compreso tra 0 e 100.")
+            except ValueError:
+                print("Errore: Inserisci un numero intero valido.")
+
+    def get_weight_method(self):
+        print("Scegli il metodo di pesatura da utilizzare per il calcolo del KNN:")
+        print("1. Uniforme - se la misura della distanza è uniforme, prende la moda dei vicini più prossimi")
+        print("2. Distanza - se la misura della distanza non è uniforme, prende la media ponderata dei vicini più prossimi")
+        while True:
+            try:
+                choice = int(input("Inserisci il numero corrispondente alla tua scelta: "))
+                if choice == 1:
+                    self.weight = 'uniform'
+                    break
+                elif choice == 2:
+                    self.weight = 'distance'
+                    break
+                else:
+                    print("Errore: Inserisci un numero valido.")
             except ValueError:
                 print("Errore: Inserisci un numero intero valido.")
 
@@ -101,5 +119,6 @@ class Input:
         self.get_path()
         self.get_k()
         self.get_evaluation_method()
+        self.get_weight_method()
         self.choose_metrics()
         return self
