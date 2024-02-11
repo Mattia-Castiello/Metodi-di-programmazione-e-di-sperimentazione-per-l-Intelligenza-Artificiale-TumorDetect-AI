@@ -17,8 +17,7 @@ if __name__ == '__main__':
     evaluation_method = user_input.evaluation
     weight_method = user_input.weight
     chosen_metrics = user_input.metrics
-    K = user_input.K
-
+    K = 1 if user_input.K is None else user_input.K
     training_perc = user_input.training / 100 # percentuale di dati da utilizzare nel set di training
     k = user_input.k
 
@@ -29,10 +28,9 @@ if __name__ == '__main__':
     if(evaluation_method == 1):
         holdout = Holdout(data, target, chosen_metrics, k, weight_method, training_perc)
         true_positive, false_positive, true_negative, false_negative = holdout.evaluate()
-        
-        metrics = Metrics(true_positive, true_negative, false_positive, false_negative, chosen_metrics)
-        metrics.save_metrics(metrics.get_metrics())
     else:
-        kfold = KFoldCrossValidation(data, target, K, k, chosen_metrics)
-        kfold.split()
-        kfold.evaluate()
+        kfold = KFoldCrossValidation(data, target, chosen_metrics, k, weight_method, K)
+        true_positive, false_positive, true_negative, false_negative = kfold.evaluate()
+    
+    metrics = Metrics(true_positive, true_negative, false_positive, false_negative, chosen_metrics)
+    metrics.save_metrics(metrics.get_metrics(K))

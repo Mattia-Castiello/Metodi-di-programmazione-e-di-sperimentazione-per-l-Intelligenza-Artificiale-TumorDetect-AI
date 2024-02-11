@@ -32,7 +32,6 @@ class Input:
                 choice = int(input("Inserisci il numero corrispondente alla tua scelta: "))
                 if choice == 1:
                     self.evaluation = 1
-                    self.get_training_percentage()
                     break
                 elif choice == 2:
                     self.evaluation = 2
@@ -118,6 +117,7 @@ class Input:
     def get_input(self):
         self.get_path()
         self.get_k()
+        self.get_training_percentage()
         self.get_evaluation_method()
         self.get_weight_method()
         self.choose_metrics()
