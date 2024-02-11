@@ -12,8 +12,18 @@ class Input:
         self.data = data
 
     def get_path(self):
-        self.path_dataset = input("Inserisci il percorso del dataset: ")
-        self.data = Reader_dataset_factory().readerFactoryManager(self.path_dataset)
+        while True:
+            self.path_dataset = input("Inserisci il percorso del dataset: ")
+            if self.path_dataset.startswith('"') and self.path_dataset.endswith('"'):
+                self.path_dataset = self.path_dataset[1:-1]  # Rimuove i doppi apici
+            try:
+                self.data = Reader_dataset_factory().readerFactoryManager(self.path_dataset)
+                if self.data is not None:
+                    break
+                else:
+                    print(f"Il file '{self.path_dataset}' non è stato trovato.")
+            except FileNotFoundError:
+                print(f"Il file '{self.path_dataset}' non è stato trovato.")
 
     def get_k(self):
         while True:
