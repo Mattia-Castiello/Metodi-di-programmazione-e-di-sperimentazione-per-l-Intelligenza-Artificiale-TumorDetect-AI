@@ -1,25 +1,26 @@
 import numpy as np
-from Input import Input
 import matplotlib.pyplot as plt
 
 class Metrics:
     """
     Modella le metriche di validazione del modello
     """
-    def __init__(self, true_positive, true_negative, false_positive, false_negative):
+    def __init__(self, true_positive, true_negative, false_positive, false_negative, metrics=[]):
         """
         Costruttore
 
         Parameters
         ----------
-        true_positive : list
+        true_positive : int
             il numero di veri positivi
-        true_negative : list
+        true_negative : int
             il numero di veri negativi
-        false_positive : list
+        false_positive : int
             il numero di falsi positivi
-        false_negative : list
+        false_negative : int
             il numero di falsi negativi
+        metrics : list
+            la lista delle metriche
 
         Returns
         -------
@@ -29,6 +30,7 @@ class Metrics:
         self.true_negative = true_negative
         self.false_positive = false_positive
         self.false_negative = false_negative
+        self.metrics = metrics
 
     def confusion_matrix(self):
         """
@@ -39,7 +41,11 @@ class Metrics:
         list
             la confusion matrix
         """
-        confusion_matrix = [len(self.true_negative), len(self.false_positive), len(self.false_negative), len(self.true_positive)]
+        print("True Positive: ", self.true_positive)
+        print("True Negative: ", self.true_negative)
+        print("False Positive: ", self.false_positive)
+        print("False Negative: ", self.false_negative)
+        confusion_matrix = [self.true_negative, self.false_positive, self.false_negative, self.true_positive]
         return confusion_matrix
 
     def accuracy(self, confusion_matrix, K=1):
@@ -55,10 +61,10 @@ class Metrics:
             il numero di esperimenti
         Returns
         -------
-        float
+        accuracy : float
             l'accuratezza
 
-        list
+        accuracy scores: list
             i valori di accuratezza per ogni esperimento
 
         """
@@ -81,10 +87,10 @@ class Metrics:
             il numero di esperimenti
         Returns
         -------
-        float
+        error_rate : float
             l'error rate
 
-        list
+        error_rate_scores : list
             i valori di error rate per ogni esperimento
 
         """
@@ -107,10 +113,10 @@ class Metrics:
             il numero di esperimenti
         Returns
         -------
-        float
+        sensitivity : float
             la sensitivity
 
-        list
+        sensitivity_scores : list
             i valori di sensitivity per ogni esperimento
 
         """
@@ -133,10 +139,10 @@ class Metrics:
             il numero di esperimenti
         Returns
         -------
-        float
+        specificity : float
             la specificity
 
-        list
+        specificity_scores : list
             i valori di specificity per ogni esperimento
 
         """
@@ -159,10 +165,10 @@ class Metrics:
             il numero di esperimenti
         Returns
         -------
-        float
+        geometric_mean : float
             la geometric mean
 
-        list
+        geometric_mean_scores : list
             i valori di geometric mean per ogni esperimento
 
         """
@@ -175,14 +181,12 @@ class Metrics:
         return geometric_mean, geometric_mean_scores
 
 
-    def get_metrics(self, confusion_matrix, K=1):
+    def get_metrics(self, K=1):
         """
         Calcola tutte le metriche
 
         Parameters
         ----------
-        confusion_matrix : list
-            la confusion matrix
 
         K : int
             il numero di esperimenti
@@ -191,19 +195,26 @@ class Metrics:
         list
             le metriche
         """
-        metrics = []
+        metrics = {}
+        confusion_matrix = self.confusion_matrix()
         if 1 in self.metrics:
-            metrics.append(self.accuracy(confusion_matrix, K))
+            metrics['Accuracy'] = self.accuracy(confusion_matrix, K)
         if 2 in self.metrics:
-            metrics.append(self.error_rate(confusion_matrix, K))
+            metrics['Error Rate'] = self.error_rate(confusion_matrix, K)
         if 3 in self.metrics:
-            metrics.append(self.sensitivity(confusion_matrix, K))
+            metrics['Sensitivity'] = self.sensitivity(confusion_matrix, K)
         if 4 in self.metrics:
-            metrics.append(self.specificity(confusion_matrix, K))
+            metrics['Specificity'] = self.specificity(confusion_matrix, K)
         if 5 in self.metrics:
-            metrics.append(self.geometric_mean(confusion_matrix, K))
+            metrics['Geometric Mean'] = self.geometric_mean(confusion_matrix, K)
         if 6 in self.metrics:
-            metrics = [self.accuracy(confusion_matrix, K), self.error_rate(confusion_matrix, K), self.sensitivity(confusion_matrix, K), self.specificity(confusion_matrix, K), self.geometric_mean(confusion_matrix, K)]
+            metrics = {
+                'Accuracy': self.accuracy(confusion_matrix, K),
+                'Error Rate': self.error_rate(confusion_matrix, K),
+                'Sensitivity': self.sensitivity(confusion_matrix, K),
+                'Specificity': self.specificity(confusion_matrix, K),
+                'Geometric Mean': self.geometric_mean(confusion_matrix, K)
+            }
         return metrics
 
     def save_metrics(self, metrics, filename='Metrics.txt'):
@@ -212,7 +223,7 @@ class Metrics:
 
         Parameters
         ----------
-        metrics : list
+        metrics : dict
             le metriche
 
         filename : str
@@ -222,8 +233,8 @@ class Metrics:
         None
         """
         with open(filename, 'w') as file:
-            for metric in metrics:
-                file.write(str(metric) + '\n')
+            for metric, value in metrics.items():
+                file.write(f'{metric}: {value}\n')
         print("Le metriche sono state salvate su file.")
         return None
 
