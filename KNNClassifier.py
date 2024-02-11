@@ -1,10 +1,13 @@
 import numpy as np
+import random
 
 class KNNClassifier:
-    def __init__(self, k, weight=None):
+    def __init__(self, k, weight='None'):
         # Memorizza il valore di k e la misura della distanza come uniforme o distanza
         self.k = k
         self.weight = weight
+        self.x_train = None
+        self.y_train = None
 
     def fit(self, x_train, y_train):
         '''
@@ -17,9 +20,10 @@ class KNNClassifier:
         
         self.x_train = x_train
         self.y_train = y_train
-
+    
     def predict(self, x):
         predictions = []
+        print("Tipo di calcolo: ", self.weight)
         for test in x:
             temp = self.__predict(test)
             predictions.append(temp)
@@ -32,11 +36,10 @@ class KNNClassifier:
             distances.append(distance)
         min_distance_indices = sorted(range(len(distances)), key=lambda index: distances[index])[: self.k]
         min_distances = sorted(distances)[: self.k]
-        print(min_distance_indices)
         min_distance_labels = []
         for i in min_distance_indices:
-            min_distance_labels.append(self.y_train[i])
-        
+            min_distance_labels.append(self.y_train[i][0])  # Prendi solo il primo elemento dall'array
+
         # Se la misura della distanza non è uniforme, prende la media ponderata dei vicini più prossimi
         if self.weight == 'distance':
             most_common = {}
@@ -48,7 +51,7 @@ class KNNClassifier:
                     else:
                         most_common[current_label] += 1 / min_distances[i]
             return max(most_common, key=lambda x: most_common[x])
-        else: # Se la misura della distanza è uniforme, prendi la moda dei vicini più prossimi
+        else:  # Se la misura della distanza è uniforme, prendi la moda dei vicini più prossimi
             most_common = {}
             for i in min_distance_labels:
                 if i not in most_common.keys():
