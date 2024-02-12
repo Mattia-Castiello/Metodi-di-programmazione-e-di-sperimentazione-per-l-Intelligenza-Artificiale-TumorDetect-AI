@@ -15,8 +15,14 @@ class Holdout:
             il dataset da suddividere
         target : pandas.Series
             la serie di valori target
-        train_size : float, optional
-            la proporzione di esempi da assegnare al training set. Di default è 0.8.
+        metrics : list
+            la lista di metriche da calcolare
+        k : int
+            il valore di k per il modello KNN
+        weight : string
+            il metodo di pesatura da utilizzare
+        train_size : float
+            la percentuale di dati da utilizzare nel training set
 
 
         Returns
@@ -38,29 +44,28 @@ class Holdout:
 
         Returns
         -------
-        pandas.DataFrame
+        train : numpy.ndarray
             il training set
-        pandas.DataFrame
+        test : numpy.ndarray
             il test set
-        pandas.Series
+        train_target : numpy.ndarray
             i valori target del training set
-        pandas.Series
+        test_target : numpy.ndarray
             i valori target del test set
 
         """
 
         train_index = np.random.choice(self.data.index, size=int(self.train_size*len(self.data)), replace=False)
-        test_index = self.data.index[~self.data.index.isin(train_index)] # ~ è l'operatore di negazione logica: prende
-        # gli indici che non sono in train_index.
-        # isin controlla se è presente quel valore nel DataFrame
+        test_index = self.data.index[~self.data.index.isin(train_index)]
 
-        #generazione dei train set e test set
-        train = self.data.loc[train_index] #loc seleziona le righe con gli indici indicati
+        # generazione dei train set e test set
+        train = self.data.loc[train_index]
         test = self.data.loc[test_index]
-        #generazione dei target
+        # generazione dei target
         train_target = self.target.loc[train_index]
         test_target = self.target.loc[test_index]
 
+        # conversione in Numpy array
         train = train.to_numpy()
         train_target = train_target.to_numpy()
         test = test.to_numpy()
@@ -77,24 +82,21 @@ class Holdout:
 
         Returns
         -------
-        true_positive : int
-            il numero di veri positivi
-        false_positive : int
-            il numero di falsi positivi
-        true_negative : int
-            il numero di veri negativi
-        false_negative : int
-            il numero di falsi negativi
-
+        None
 
         """
+        # suddividisione del dataset
         train, test, train_target, test_target = self.split()
 
         print("split type: ", type(train), type(test), type(train_target), type(test_target))
 
+        # creazione di un'istanza del modello KNN
         knn = KNNClassifier(self.k, self.weight)
-        knn.fit(train, train_target)  # addestra il modello
-        predictions = knn.predict(test)  # predice i valori target
+
+        # addestramento del modello
+        knn.fit(train, train_target)
+        # predizione dei valori target
+        predictions = knn.predict(test)
 
         true_positive = 0
         true_negative = 0
@@ -104,6 +106,7 @@ class Holdout:
         print("predictions len: ", len(predictions), "\ntest_target len: ", len(test_target))
         print("predictions: ", predictions)
 
+        # calcolo le metriche
         for i in range(len(predictions)):
             if predictions[i] == 4 and test_target[i] == 4:
                 true_positive += 1
