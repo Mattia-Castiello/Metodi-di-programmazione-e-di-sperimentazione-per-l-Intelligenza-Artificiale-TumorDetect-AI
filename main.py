@@ -4,33 +4,39 @@ from dataprocessing.Standardizer import Standardizer
 from dataprocessing.Bridger import Bridger
 from manage.holdout import Holdout
 from manage.kfoldcrossvalidation import KFoldCrossValidation
-from manage.metrics import Metrics
+
+def prepare_data(input_data):
+    # Prepara i dati eliminando duplicati, eseguendo l'imputazione e la standardizzazione
+    drop_duplicate = DropDuplicate()
+    input_data = drop_duplicate.drop(input_data)
+    input_data = Bridger().impution(input_data)
+    return Standardizer().standardization(input_data)
 
 if __name__ == '__main__':
+    # Ottieni input dall'utente
     user_input = Input()
     user_input.get_input()
 
-    standardization = Standardizer()
-    bridger = Bridger()
-    dropduplicate = DropDuplicate()
-
+    # Estrapola i parametri di input
     evaluation_method = user_input.evaluation
     weight_method = user_input.weight
     chosen_metrics = user_input.metrics
-    K = 1 if user_input.K is None else user_input.K
-    training_perc = user_input.training / 100 # percentuale di dati da utilizzare nel set di training
+    K = user_input.K if user_input.K is not None else 1
+    training_percentage = user_input.training / 100
     k = user_input.k
 
-    user_input.data = dropduplicate.drop(user_input.data)
-    user_input.data = bridger.impution(user_input.data)
-    data, target = standardization.standardization(user_input.data)
+    try:
+        # Prepara i dati
+        data, target = prepare_data(user_input.data)
 
-    if(evaluation_method == 1):
-        holdout = Holdout(data, target, chosen_metrics, k, weight_method, training_perc)
-        true_positive, false_positive, true_negative, false_negative = holdout.evaluate()
-    else:
-        kfold = KFoldCrossValidation(data, target, chosen_metrics, k, weight_method, K)
-        true_positive, false_positive, true_negative, false_negative = kfold.evaluate()
-    
-    metrics = Metrics(true_positive, true_negative, false_positive, false_negative, chosen_metrics)
-    metrics.save_metrics(metrics.get_metrics(K))
+        # Esegue la valutazione in base al metodo scelto
+        if evaluation_method == 1:
+            holdout = Holdout(data, target, chosen_metrics, k, weight_method, training_percentage)
+            holdout.evaluate()
+        else:
+            kfold = KFoldCrossValidation(data, target, chosen_metrics, k, weight_method, K)
+            kfold.evaluate()
+
+    except Exception as e:
+        # Gestisce eventuali eccezioni
+        print("An error occurred:", str(e))
