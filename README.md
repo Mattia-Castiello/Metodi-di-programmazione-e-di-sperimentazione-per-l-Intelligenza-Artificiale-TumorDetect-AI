@@ -12,26 +12,16 @@ Il dataset utilizzato in questo progetto è `breast_cancer.csv` ed è così form
 
 - **Nomi delle Caratteristiche**:
 
-- **Sample code number**: Identificativo unico per ogni campione.
-
+  - **Sample code number**: Identificativo unico per ogni campione.
   - **Clump Thickness**: Spessore del grumo di cellule.
-
   - **Uniformity of Cell Size**: Uniformità delle dimensioni cellulari.
-
   - **Uniformity of Cell Shape**: Uniformità delle forme cellulari.
-
   - **Marginal Adhesion**: Adesione marginale delle cellule.
-
   - **Single Epithelial Cell Size**: Dimensione della singola cellula epiteliale.
-
   - **Bare Nuclei**: Nuclei scoperti.
-
   - **Bland Chromatin**: Cromatina blanda.
-
   - **Normal Nucleoli**: Nucleoli normali.
-
   - **Mitoses**: Tasso di mitosi.
-
   - **Class**: Classificazione del tumore (2 per benigno, 4 per maligno).
  
 è possibile trovare il dataset [qui](https://raw.githubusercontent.com/Mattia-Castiello/Progetto_Progammazione_23-24/main/breast_cancer.csv).
@@ -69,5 +59,15 @@ I risultati dell'esecuzione del programma sono presentati in due modi:
 2) Se si sceglie come metodo di valutazione `K-fold Cross Validation` si otterrà un file di output con il nome desiderato o, di default, `Metrics.txt`, dove sono salvate le metriche di validazione del modello, e due plot:
    - 2.1 `Boxplot`: per ciascuna metrica mostra la distribuzione dei valori in tutti gli esperimenti.
    - 2.2 `Line Plot`: illustra per ciascuna metrica come i valori cambiano attraverso diversi esperimenti.
+
+# Configurazione del virtual environment
+Prima di eseguire il programma, è necessario configurare un virtual environment. Questo può essere realizzato eseguendo i comandi:
+1) Creare un virtual environment da terminale:
+   - `python3 -m venv venv`
+2) Attivare il virtual environment:
+   - **Windows**: `venv\Scripts\activate`
+   - **Unix/MacOS**: `source venv/bin/activate`
+3) Installare i requisiti:
+   - `pip install -r requirements.txt`
 
 
