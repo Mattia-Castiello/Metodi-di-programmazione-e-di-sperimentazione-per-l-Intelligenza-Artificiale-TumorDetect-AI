@@ -1,5 +1,4 @@
-import pandas as pd
-from .Reader_dataset import Reader_dataset
+import os
 from .Reader_dataset_csv import Reader_dataset_csv
 from .Reader_dataset_json import Reader_dataset_json
 
@@ -23,21 +22,20 @@ class Reader_dataset_factory:
         DataFrame: Il DataFrame contenente il dataset.
         """
         try:
-            if filepath.endswith('.csv'):
-                # Se l'estensione del file è .csv, istanzia Reader_dataset_csv e chiama il metodo parse
-                return Reader_dataset_csv().parse(filepath)
-            elif filepath.endswith('.json'):
-                # Se l'estensione del file è .json, istanzia Reader_dataset_json e chiama il metodo parse
-                return Reader_dataset_json().parse(filepath)
-            else:
-                # Se l'estensione del file non è tra quelle supportate, solleva un'eccezione
-                raise RuntimeError("L'estensione del file non è tra quelle supportate.")
+            if os.path.isfile(filepath):  # Verifica se il file esiste nel percorso specificato
+                if filepath.endswith('.csv'):
+                    # Se l'estensione del file è .csv, istanzia Reader_dataset_csv e chiama il metodo parse
+                    return Reader_dataset_csv().parse(filepath)
+                elif filepath.endswith('.json'):
+                    # Se l'estensione del file è .json, istanzia Reader_dataset_json e chiama il metodo parse
+                    return Reader_dataset_json().parse(filepath)
+                else:
+                    # Se l'estensione del file non è tra quelle supportate, solleva un'eccezione
+                    raise RuntimeError("L'estensione del file non è tra quelle supportate.")
         except RuntimeError as error:
-            # Se viene sollevata un'eccezione, avvisa l'utente di cambiare l'estensione del file
-            # e chiede di inserire un nuovo filepath
-            print(error)
-            print("\nCambia l'estensione del file in csv o json")
-            print("Inserisci un nuovo filepath:")
-            new_filepath = input()
-            # Ricorsivamente richiama readerFactoryManager con il nuovo filepath
-            return self.readerFactoryManager(new_filepath)
+                # Se viene sollevata un'eccezione, avvisa l'utente di cambiare l'estensione del file
+                # e chiede di inserire un nuovo filepath
+                print(error)
+                print("Cambia l'estensione del file in csv o json")
+                return None
+
