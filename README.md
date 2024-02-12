@@ -39,7 +39,7 @@ Il dataset breast_cancer.csv è così formato:
  
 è possibile trovare il dataset [qui](https://raw.githubusercontent.com/Mattia-Castiello/Progetto_Progammazione_23-24/main/breast_cancer.csv).
 
-# Eseguzione  del Codice
+# Esecuzione  del Codice
 Per mettere in funzione il codice di questo progetto, segui queste indicazioni:
 
 - **Installazione dei Requisiti**: Prima di avviare l'applicazione, è indispensabile installare i requisiti. Questo può essere realizzato eseguendo il comando pip install -r requirements.txt nella cartella principale del progetto. Questo comando installerà tutte le librerie richieste, come numpy, pandas, matplotlib, ecc.
@@ -62,3 +62,14 @@ Queste scelte determinano il modo in cui vengono valutate le performance del mod
 - **Geometric Mean**: Misura l'equilibrio tra Sensibilità e Specificità.
 
 Esecuzione del programma: Il programma può essere eseguito tramite il file "main.py", specificando le opzioni di input come argomenti della linea di comando, quando e come richiesto.
+
+# Risultati
+I risultati dell'esecuzione del programma sono presentati in due modi:
+1) Se si sceglie come metodo di valutazione Holdout si otterrà un file di output "Metrics.txt" nel quale sono salvate le metriche di validazione del modello.
+2) Se si sceglie come metodo di valutazione K-fold Cross Validation si otterrà un file di output "Metrics.txt", dove sono salvate le metriche di validazione del modello, e due plot:
+  - 2.1) Boxplot: per ciascuna metrica mostra la distribuzione dei valori in tutti gli esperimenti.
+  - 2.2) Line Plot: illustra per ciascuna metrica come i valori cambiano attraverso diversi esperimenti.
+
+# Conclusioni
+Questo progetto offre un'analisi delle prestazioni del classificatore k-NN nel contesto della diagnostica dei tumori. L'interfaccia utente è stata progettata per essere intuitiva e facile da usare, consentendo agli utenti di personalizzare l'esecuzione e l'analisi in base alle proprie esigenze. I risultati dell'analisi forniscono intuizioni sulle prestazioni del modello e sulle caratteristiche dei dati di input. Questo progetto può essere adattato per affrontare problemi di classificazione in altri contesti, consentendo agli utenti di esplorare e comprendere i dati in modo efficace e accurato.
+
