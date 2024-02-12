@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 class Metrics:
@@ -283,9 +284,9 @@ class Metrics:
             }
         return metrics
 
-    def save_metrics(self, metrics, filename='Metrics.txt'):
+    def save_metrics(self, metrics, filename=None):
         """
-        Salva le metriche su file
+        Salva le metriche su file Excel
 
         Parameters
         ----------
@@ -293,22 +294,18 @@ class Metrics:
             le metriche
 
         filename : str
-            il nome del file
+            il nome del file Excel
         Returns
         -------
         None
         """
-        with open(filename, 'w') as file:
-            for metric, value in metrics.items():
-                # Verifica se il valore è una lista
-                if isinstance(value, list):
-                    # Se è una lista, formatta la lista come stringa
-                    value_str = ', '.join([str(v) for v in value])
-                    print(f'{metric}: {value_str}')
-                    file.write(f'{metric}: {value_str}\n')
-                else:
-                    file.write(f'{metric}: {value[1]}\n')
-        print("Le metriche sono state salvate su file.")
+        if filename is None:
+            filename = input("Inserisci il nome del file Excel (con estensione .xlsx): ")
+
+        df = pd.DataFrame(metrics.items(), columns=['Metrica', 'Valore'])
+        df.to_excel(filename, index=False)
+
+        print("Le metriche sono state salvate su file Excel.")
         return None
 
     def metrics_plot(self, metrics):
