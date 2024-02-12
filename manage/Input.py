@@ -20,8 +20,6 @@ class Input:
                 self.data = Reader_dataset_factory().readerFactoryManager(self.path_dataset)
                 if self.data is not None:
                     break
-                else:
-                    print(f"Il file '{self.path_dataset}' non è stato trovato.")
             except FileNotFoundError:
                 print(f"Il file '{self.path_dataset}' non è stato trovato.")
 
