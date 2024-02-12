@@ -36,8 +36,6 @@ class Reader_dataset_factory:
                 # Se viene sollevata un'eccezione, avvisa l'utente di cambiare l'estensione del file
                 # e chiede di inserire un nuovo filepath
                 print(error)
-                print("\nCambia l'estensione del file in csv o json")
-                print("Inserisci un nuovo filepath:")
-                new_filepath = input()
-                # Ricorsivamente richiama readerFactoryManager con il nuovo filepath
-                return self.readerFactoryManager(new_filepath)
+                print("Cambia l'estensione del file in csv o json")
+                return None
+
