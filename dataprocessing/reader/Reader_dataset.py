@@ -8,7 +8,7 @@ class Reader_dataset(ABC):
            filename (str): Nome del file del dataset.
 
            Returns:
-           Dipende dall'implementazione delle sotto classi.
+           Dipende dall'implementazione delle sottoclassi.
     """
     @abstractmethod
     #il metodo pass prende in ingresso il nome di un qualsiasi dataset
