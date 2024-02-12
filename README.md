@@ -4,7 +4,7 @@ Questo progetto ha lo scopo di sviluppare un programma che, ricevendo in ingress
 
 
 # Il Dataset 
-Il dataset utilizzato in questo progetto è `breast_cancer.csv` ed è così formato:
+Nel contesto di questo progetto, utilizziamo il dataset `breast_cancer.csv` il quale fornisce dettagli su alcuni tipi di cellule tumorali. Il dataset è strutturato come segue:
 
 - **Numero di Campioni**: 683 campioni.
 
@@ -65,8 +65,8 @@ Prima di eseguire il programma, è necessario configurare un virtual environment
 1) Creare un virtual environment da terminale:
    - `python3 -m venv venv`
 2) Attivare il virtual environment:
-   - **Windows**: `venv\Scripts\activate`
-   - **Unix/MacOS**: `source venv/bin/activate`
+   - **Windows**: `.\venv\Scripts\activate`
+   - **Unix/MacOS**: `source .\venv/bin/activate`
 3) Installare i requisiti:
    - `pip install -r requirements.txt`
 
