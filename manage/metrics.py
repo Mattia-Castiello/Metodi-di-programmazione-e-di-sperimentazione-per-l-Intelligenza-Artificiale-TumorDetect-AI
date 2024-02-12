@@ -1,4 +1,5 @@
 import numpy as np
+from openpyxl import load_workbook
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -300,13 +301,32 @@ class Metrics:
         None
         """
         if filename is None:
-            filename = input("Inserisci il nome del file Excel (con estensione .xlsx): ")
+            filename = input("Inserisci il nome del file Excel (senza estensione .xlsx): ")
+            filename = filename + '.xlsx' if '.xlsx' not in filename else filename # Aggiungi l'estensione .xlsx se non è presente
 
-        df = pd.DataFrame(metrics.items(), columns=['Metrica', 'Valore'])
-        df.to_excel(filename, index=False)
+        metric_values = []
+        max_length = 0 # Lunghezza massima della colonna dei valori
+        for metric, value in metrics.items():
+            # Verifica se il valore è una lista
+            if isinstance(value, list):
+                # Se è una lista, formatta la lista come stringa
+                value_str = ', '.join([str(v) for v in value])
+            else:
+                value_str = value[1]
+            metric_values.append((metric, value_str))
+            max_length = max(max_length, len(str(value_str))) # Aggiorna la lunghezza massima 
+
+        df = pd.DataFrame(metric_values, columns=['Metriche', 'Valori'])
+        df.to_excel(filename, sheet_name='Risultati Metriche', index=False)
+
+        # Imposta la larghezza delle colonne utilizzando openpyxl
+        workbook = load_workbook(filename)
+        sheet = workbook['Risultati Metriche']
+        sheet.column_dimensions['A'].width = 20  # Imposta la larghezza della colonna A
+        sheet.column_dimensions['B'].width = max_length + 10  # Imposta la larghezza della colonna B
+        workbook.save(filename)
 
         print("Le metriche sono state salvate su file Excel.")
-        return None
 
     def metrics_plot(self, metrics):
         """
