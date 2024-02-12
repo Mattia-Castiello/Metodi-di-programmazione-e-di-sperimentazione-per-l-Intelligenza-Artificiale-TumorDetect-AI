@@ -73,7 +73,7 @@ class KFoldCrossValidation:
             self.fold.append([train, test, train_target, test_target])
         return self.fold
 
-    def evaluate(self, k):
+    def evaluate(self):
         """
         Valuta le performance del modello KNN con k-fold cross validation.
 
