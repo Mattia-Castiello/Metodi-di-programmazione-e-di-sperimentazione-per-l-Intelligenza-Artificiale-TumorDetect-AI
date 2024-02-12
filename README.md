@@ -55,8 +55,8 @@ Per eseguire il codice, è necessario seguire i seguenti passaggi:
 
 # Risultati
 I risultati dell'esecuzione del programma sono presentati in due modi:
-1) Se si sceglie come metodo di valutazione `Holdout` si otterrà un file di output con il nome desiderato o, di default, `Metrics.txt`, nel quale sono salvate le metriche di validazione del modello.
-2) Se si sceglie come metodo di valutazione `K-fold Cross Validation` si otterrà un file di output con il nome desiderato o, di default, `Metrics.txt`, dove sono salvate le metriche di validazione del modello, e due plot:
+1) Se si sceglie come metodo di valutazione `Holdout` si otterrà un file di output con il nome desiderato in formato Excel nel quale sono salvate le metriche di validazione del modello.
+2) Se si sceglie come metodo di valutazione `K-fold Cross Validation` si otterrà un file di output con il nome desiderato in formato Excel, dove sono salvate le metriche di validazione del modello, e due plot:
    - 2.1 `Boxplot`: per ciascuna metrica mostra la distribuzione dei valori in tutti gli esperimenti.
    - 2.2 `Line Plot`: illustra per ciascuna metrica come i valori cambiano attraverso diversi esperimenti.
 
