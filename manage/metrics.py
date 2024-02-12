@@ -75,6 +75,7 @@ class Metrics:
         false_positive = confusion_matrix[1]
         false_negative = confusion_matrix[2]
         true_negative = confusion_matrix[3]
+
         # Se la confusion matrix è una lista di liste
         if isinstance(confusion_matrix[0], list):
             for i in range(K):
@@ -83,6 +84,7 @@ class Metrics:
         else:
             accuracy_scores.append((true_positive + true_negative) / (true_positive + false_positive + false_negative + true_negative))
 
+        # Calcola l'accuratezza media
         accuracy = np.mean(accuracy_scores)
         return accuracy, accuracy_scores
 
@@ -111,6 +113,7 @@ class Metrics:
         false_positive = confusion_matrix[1]
         false_negative = confusion_matrix[2]
         true_negative = confusion_matrix[3]
+
         # Se la confusion matrix è una lista di liste
         if isinstance(confusion_matrix[0], list):
             for i in range(K):
@@ -118,6 +121,8 @@ class Metrics:
         # Se la confusion matrix è una lista singola
         else:
             error_rate_scores.append((false_positive + false_negative) / (true_positive + false_positive + false_negative + true_negative))
+
+        # Calcola l'error rate medio
         error_rate = np.mean(error_rate_scores)
         return error_rate, error_rate_scores
 
@@ -191,6 +196,8 @@ class Metrics:
         # Se la confusion matrix è una lista singola
         else:
             specificity_scores.append(true_negative / (true_negative + false_positive))
+
+        # Calcola la specificity media
         specificity = np.mean(specificity_scores)
         return specificity, specificity_scores
 
@@ -231,6 +238,8 @@ class Metrics:
             sensitivity = true_positive / (true_positive + false_negative)
             specificity = true_negative / (true_negative + false_positive)
             geometric_mean_scores.append(np.sqrt(sensitivity * specificity))
+
+        # Calcola la geometric mean media
         geometric_mean = np.mean(geometric_mean_scores)
         return geometric_mean, geometric_mean_scores
 
@@ -249,8 +258,11 @@ class Metrics:
         list
             le metriche
         """
+
         metrics = {}
         confusion_matrix = self.confusion_matrix()
+
+        # Calcola le metriche richieste
         if 1 in self.metrics:
             metrics['Accuracy'] = self.accuracy(confusion_matrix, K)
         if 2 in self.metrics:
@@ -305,20 +317,8 @@ class Metrics:
 
         Parameters
         ----------
-        accuracy_scores : list
-            i valori di accuratezza per ogni esperimento
-
-        error_rate_scores : list
-            i valori di error rate per ogni esperimento
-
-        sensitivity_scores : list
-            i valori di sensitivity per ogni esperimento
-
-        specificity_scores : list
-            i valori di specificity per ogni esperimento
-
-        geometric_mean_scores : list
-            i valori di geometric mean per ogni esperimento
+        metrics : dict
+            le metriche
         Returns
         -------
         None
@@ -332,10 +332,14 @@ class Metrics:
         plt.figure(figsize=(12, 6))
         plt.boxplot(metric_scores, labels=labels)
 
-        plt.xlabel('Metriche')  # Asse x
-        plt.ylabel('Valori')  # Asse y
-        plt.title('Metriche di validazione')  # Titolo del grafico
-        plt.grid(True)  # Mostra la griglia
+        # Asse x
+        plt.xlabel('Metriche')
+        # Asse y
+        plt.ylabel('Valori')
+        # Titolo del grafico
+        plt.title('Metriche di validazione')
+        # Mostra la griglia
+        plt.grid(True)
 
         # Estrazione dei dati per il plot a linea
         K_experiments = list(range(1, len(metric_scores[0]) + 1))
