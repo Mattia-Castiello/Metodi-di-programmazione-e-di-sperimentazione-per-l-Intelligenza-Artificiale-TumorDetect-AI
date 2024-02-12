@@ -1,30 +1,51 @@
 import pandas as pd
 import numpy as np
-class Standardizer:
-    #il metodo standardizer effettua la standardizzazione dei valori che rientrano nelle features
-    #mentre la colonna class  è identificata come target label
-    #riceve in ingresso un dataset e restituisce il dataset diviso
-    def standardization(self,dataset):
-        for col in dataset.columns:
-            if np.issubdtype(dataset[col].dtype,np.number) and col != 'Class':
-                #calcolo della deviazione standard per ogni colonna
-                std = dataset[col].std()
-                #calcolo della media per ogni colonna
-                mean = dataset[col].mean()
-                #standardizzazione delle colonne che non sono class
-                dataset[col] = (dataset[col] - mean) / std
-                data, target = self.split(dataset)
 
+class Standardizer:
+    """
+    Classe per la standardizzazione dei valori delle features nel dataset.
+
+    Attributes:
+    None
+    """
+
+    def standardization(self, dataset):
+        """
+        Standardizza le features del dataset.
+
+        Parameters:
+        dataset (DataFrame): Il DataFrame contenente il dataset.
+
+        Returns:
+        DataFrame, DataFrame: Il DataFrame con le features standardizzate e la target label.
+        """
+        for col in dataset.columns:
+            if np.issubdtype(dataset[col].dtype, np.number) and col != 'Class':
+                # Calcolo della deviazione standard per la colonna
+                std = dataset[col].std()
+                # Calcolo della media per la colonna
+                mean = dataset[col].mean()
+                # Standardizzazione delle colonne che non sono 'Class'
+                dataset[col] = (dataset[col] - mean) / std
+
+        # Divisione del dataset in features (data) e target label (target)
+        data, target = self.split(dataset)
 
         return data, target
 
-
-    #il metodo split divide il dataset in due datset contenenti rispettivamente le features in data e le labels in target
     def split(self, dataset):
+        """
+        Divide il dataset in features e target label.
 
+        Parameters:
+        dataset (DataFrame): Il DataFrame contenente il dataset.
+
+        Returns:
+        DataFrame, DataFrame: Il DataFrame con le features e il DataFrame con la target label.
+        """
+        # Seleziona tutte le colonne tranne l'ultima ('Class') come features
         data = dataset.iloc[:, :-1]
-
-
+        # Seleziona solo la colonna 'Class' come target label
         target = dataset.iloc[:, -1:]
 
         return data, target
