@@ -4,9 +4,9 @@ from .Reader_dataset import Reader_dataset
 
 #la classe Reader_dataset_csv si occupa di leggere un dataset con estensione csv
 class Reader_dataset_csv(Reader_dataset):
-    #il metodo parse prende in ingresso il nome del file e restituisce in uscita un dataset
-    def parse(self, filename):
-        df_csv=pd.read_csv(filename)
+    #il metodo parse prende in ingresso il percorso del file e restituisce in uscita un dataset
+    def parse(self, filepath):
+        df_csv=pd.read_csv(filepath)
 
         #essendo che il sample code number non è univoco per ogni campione andiamo
         #ad indicizzare la colonna in ordine crescente ed univoca
