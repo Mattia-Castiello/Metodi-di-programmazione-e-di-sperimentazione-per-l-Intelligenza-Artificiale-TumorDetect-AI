@@ -24,7 +24,6 @@ class Holdout:
         train_size : float
             la percentuale di dati da utilizzare nel training set
 
-
         Returns
             ----
         None
@@ -71,9 +70,7 @@ class Holdout:
         test = test.to_numpy()
         test_target = test_target.to_numpy()
 
-        print("\nlunghezze train e test: ", len(train), len(test), len(train_target), len(test_target))
         return train, test, train_target, test_target
-
 
 
     def evaluate(self):
@@ -88,8 +85,6 @@ class Holdout:
         # suddividisione del dataset
         train, test, train_target, test_target = self.split()
 
-        print("split type: ", type(train), type(test), type(train_target), type(test_target))
-
         # creazione di un'istanza del modello KNN
         knn = KNNClassifier(self.k, self.weight)
 
@@ -102,9 +97,6 @@ class Holdout:
         true_negative = 0
         false_positive = 0
         false_negative = 0
-
-        print("predictions len: ", len(predictions), "\ntest_target len: ", len(test_target))
-        print("predictions: ", predictions)
 
         # calcolo le metriche
         for i in range(len(predictions)):
@@ -120,6 +112,3 @@ class Holdout:
         metrics = Metrics(true_positive, true_negative, false_positive, false_negative, self.metrics)
         output_metrics = metrics.get_metrics()
         metrics.save_metrics(output_metrics)
-
-
-

@@ -23,7 +23,6 @@ class KNNClassifier:
     
     def predict(self, x):
         predictions = []
-        print("Tipo di calcolo: ", self.weight)
         for test in x:
             temp = self.__predict(test)
             predictions.append(temp)

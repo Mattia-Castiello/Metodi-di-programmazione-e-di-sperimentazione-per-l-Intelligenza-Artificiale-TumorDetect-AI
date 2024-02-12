@@ -108,7 +108,6 @@ class KFoldCrossValidation:
 
             # Ottiene i set di addestramento e test per il fold corrente
             train, test, train_target, test_target = self.fold[i]
-            print("split type: ", type(train), type(test), type(train_target), type(test_target))
 
             # Creazione di un oggetto KNNClassifier con i parametri specificati
             knn = KNNClassifier(self.k, self.weight)
@@ -139,8 +138,6 @@ class KFoldCrossValidation:
             true_negative_list.append(true_negative)
             false_positive_list.append(false_positive)
             false_negative_list.append(false_negative)
-        print("true positive list: ", true_positive_list, "\ntrue negative list: ", true_negative_list,
-              "\nfalse positive list: ", false_positive_list, "\nfalse negative list: ", false_negative_list)
 
         # Calcola e salva le metriche aggregate e visualizza un grafico
         metrics = Metrics(true_positive_list, true_negative_list, false_positive_list, false_negative_list,self.metrics)
