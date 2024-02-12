@@ -6,18 +6,22 @@ from .Reader_dataset_json import Reader_dataset_json
 # La classe Reader_dataset_factory instanzia la giusta classe in base all'estensione del file di input
 class Reader_dataset_factory:
     """
-         Gestisce la creazione dell'oggetto Reader_dataset appropriato in base all'estensione del file.
+    Factory per la creazione di oggetti Reader_dataset_csv o Reader_dataset_json in base all'estensione del file.
 
-         Parameters:
-         filepath (str): Il percorso del file.
-
-         Returns:
-         DataFrame: Il DataFrame contenente il dataset.
-         """
-
+    Attributes:
+    None
+    """
 
     def readerFactoryManager(self, filepath):
+        """
+        Gestisce la creazione dell'oggetto Reader_dataset appropriato in base all'estensione del file.
 
+        Parameters:
+        filepath (str): Il percorso del file.
+
+        Returns:
+        DataFrame: Il DataFrame contenente il dataset.
+        """
         try:
             if filepath.endswith('.csv'):
                 # Se l'estensione del file è .csv, istanzia Reader_dataset_csv e chiama il metodo parse
