@@ -25,6 +25,8 @@ class Metrics:
             il numero di falsi negativi
         metrics : list
             la lista delle metriche
+        filename : str
+            il nome del file Excel    
 
         Returns
         -------
