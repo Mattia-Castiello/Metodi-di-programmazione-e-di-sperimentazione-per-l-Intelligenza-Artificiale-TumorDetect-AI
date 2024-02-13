@@ -1,5 +1,7 @@
+import os
 import numpy as np
 from openpyxl import load_workbook
+import openpyxl
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -7,7 +9,7 @@ class Metrics:
     """
     Modella le metriche di validazione del modello
     """
-    def __init__(self, true_positive, true_negative, false_positive, false_negative, metrics=[]):
+    def __init__(self, true_positive, true_negative, false_positive, false_negative, metrics=[], filename=None):
         """
         Costruttore
 
@@ -33,6 +35,8 @@ class Metrics:
         self.false_positive = false_positive
         self.false_negative = false_negative
         self.metrics = metrics
+        self.filename = filename
+
 
     def confusion_matrix(self):
         """
@@ -46,6 +50,7 @@ class Metrics:
         confusion_matrix = [self.true_negative, self.false_positive, self.false_negative, self.true_positive]
 
         return confusion_matrix
+
 
     def accuracy(self, confusion_matrix, K=1):
         """
@@ -85,6 +90,7 @@ class Metrics:
         accuracy = np.mean(accuracy_scores)
         return accuracy, accuracy_scores
 
+
     def error_rate(self, confusion_matrix, K=1):
         """
         Calcola l'error rate
@@ -123,6 +129,7 @@ class Metrics:
         error_rate = np.mean(error_rate_scores)
         return error_rate, error_rate_scores
 
+
     def sensitivity(self, confusion_matrix, K=1):
         """
         Calcola la sensitivity
@@ -159,6 +166,7 @@ class Metrics:
 
         sensitivity = np.mean(sensitivity_scores)
         return sensitivity, sensitivity_scores
+
 
     def specificity(self, confusion_matrix, K=1):
         """
@@ -197,6 +205,7 @@ class Metrics:
         # Calcola la specificity media
         specificity = np.mean(specificity_scores)
         return specificity, specificity_scores
+
 
     def geometric_mean(self, confusion_matrix, K=1):
         """
@@ -280,6 +289,7 @@ class Metrics:
             }
         return metrics
 
+
     def save_metrics(self, metrics, filename=None):
         """
         Salva le metriche su file Excel
@@ -298,6 +308,8 @@ class Metrics:
         if filename is None:
             filename = input("Inserisci il nome del file Excel (senza estensione .xlsx): ")
             filename = filename + '.xlsx' if '.xlsx' not in filename else filename # Aggiungi l'estensione .xlsx se non è presente
+        
+        self.filename = filename
 
         metric_values = []
         max_length = 0 # Lunghezza massima della colonna dei valori
@@ -322,6 +334,50 @@ class Metrics:
         workbook.save(filename)
 
         print("Le metriche sono state salvate su file Excel.")
+
+
+    def save_plot_to_excel(self, temp_file, sheet_name):
+        """
+        Salva un plot in un foglio Excel esistente o nuovo.
+
+        Parameters
+        ----------
+        temp_file : str
+            Il nome dell'immagine temporanea del plot.
+
+        sheet_name : str
+            Il nome del foglio in cui salvare il plot.
+
+        Returns
+        -------
+        None
+        """
+        try:
+            # Carica il foglio Excel
+            wb = load_workbook(self.filename)
+            try:
+                ws = wb[sheet_name]
+            except KeyError:
+                # Se il foglio non esiste, crea un nuovo foglio
+                ws = wb.create_sheet(title=sheet_name)
+
+            # Aggiungi il plot al foglio Excel
+            img = openpyxl.drawing.image.Image(temp_file)
+            img.width = img.width * 0.8  # Riduci la larghezza dell'immagine del 20%
+            img.height = img.height * 0.8  # Riduci l'altezza dell'immagine del 20%
+            ws.add_image(img, 'A1')
+
+            # Salva le modifiche
+            wb.save(self.filename)
+
+            # Elimina il file temporaneo
+            try:
+                os.remove(temp_file)
+            except OSError as e:
+                print(f"Errore durante l'eliminazione del file temporaneo del plot.")
+        except Exception as e:
+            print(f"Errore durante il salvataggio del plot su Excel.")
+
 
     def metrics_plot(self, metrics):
         """
@@ -353,6 +409,11 @@ class Metrics:
         # Mostra la griglia
         plt.grid(True)
 
+        # Salva il plot in un file temporaneo
+        temp_file = 'temp_plot1.png'
+        plt.savefig(temp_file)
+        self.save_plot_to_excel(temp_file, 'Plot Andatamento Metriche')
+
         # Estrazione dei dati per il plot a linea
         K_experiments = list(range(1, len(metric_scores[0]) + 1))
 
@@ -372,8 +433,14 @@ class Metrics:
 
         # Mostra il grafico
         plt.grid(True)
-        plt.show()
 
+        # Salva il plot in un file temporaneo
+        temp_file = 'temp_plot2.png'
+        plt.savefig(temp_file)
+        self.save_plot_to_excel(temp_file, 'Andamento Metriche in K')
+
+        # Mostra il plot
+        plt.show()
 
 
 
