@@ -60,5 +60,5 @@ class KNNClassifier:
             return max(most_common, key=lambda x: most_common[x])
 
     def euclidean_distance(self, x, y):
-        distance = np.sqrt(np.sum(x-y)**2)
+        distance = np.sqrt(np.sum((x-y)**2))
         return distance
