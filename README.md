@@ -24,7 +24,7 @@ Nel contesto di questo progetto, utilizziamo il dataset `breast_cancer.csv` il q
   - **Mitoses**: Tasso di mitosi.
   - **Class**: Classificazione del tumore (2 per benigno, 4 per maligno).
  
-è possibile trovare il dataset [qui](https://raw.githubusercontent.com/Mattia-Castiello/Progetto_Progammazione_23-24/main/breast_cancer.csv).
+è possibile trovare il dataset [qui](https://github.com/Mattia-Castiello/Progetto_Progammazione_23-24/blob/main/breast_cancer.csv).
 
 # Esecuzione  del Codice
 Per eseguire il codice, è necessario seguire i seguenti passaggi:
@@ -61,7 +61,8 @@ I risultati dell'esecuzione del programma sono presentati in due modi:
    - 2.2 `Line Plot`: illustra per ciascuna metrica come i valori cambiano attraverso diversi esperimenti.
 
 # Configurazione del virtual environment
-Prima di eseguire il programma, è necessario configurare un virtual environment. Questo può essere realizzato eseguendo i comandi:
+Prima di avviare il programma, verificare di avere installata sulla propria macchina [Python](https://www.python.org/downloads/) versione >= 3.9.13
+<br>Inoltre, è consigliabile configurare un ambiente virtuale per creare un'area isolata per l'esecuzione del progetto.<br>Questo può essere realizzato eseguendo la seguente guida:
 1) Creare un virtual environment da terminale:
    - `python3 -m venv venv`
 2) Attivare il virtual environment:
